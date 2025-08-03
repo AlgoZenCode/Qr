@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BarGen Pro - Advanced Barcode Generator | Create Custom Barcodes Online</title>
+    <meta name="description" content="Generate custom barcodes for retail, inventory and packaging. Supports CODE128, EAN-13, UPC-A, ISBN and more. Free online barcode creator with multiple export options.">
+    <meta name="keywords" content="barcode generator, barcode creator, retail barcodes, inventory barcodes, product barcodes, free barcode maker, online barcode tool">
+    <meta name="author" content="BarGen Pro">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yourwebsite.com/barcode-generator">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourwebsite.com/barcode-generator">
+    <meta property="og:title" content="BarGen Pro - Advanced Barcode Generator">
+    <meta property="og:description" content="Generate custom barcodes for retail, inventory and packaging. Supports multiple formats with customization options.">
+    <meta property="og:image" content="https://yourwebsite.com/images/barcode-generator-preview.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourwebsite.com/barcode-generator">
+    <meta property="twitter:title" content="BarGen Pro - Advanced Barcode Generator">
+    <meta property="twitter:description" content="Generate custom barcodes for retail, inventory and packaging. Supports multiple formats with customization options.">
+    <meta property="twitter:image" content="https://yourwebsite.com/images/barcode-generator-preview.jpg">
+    
+    <style>
+        :root {
+            --primary-blue: #00aeef;
+            --secondary-orange: #ff8c00;
+            --deep-teal: #003b46;
+            --soft-yellow: #ffd700;
+            --off-white: #f5f5f5;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --neumorph-shadow-dark: 8px 8px 16px rgba(0, 0, 0, 0.3);
+            --neumorph-shadow-light: -8px -8px 16px rgba(255, 255, 255, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --modal-bg: #1c1c2e;
+            --modal-text: #e0e0e0;
+            --modal-accent: #00bcd4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--deep-teal), #001f27);
+            color: var(--off-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .background-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+        }
+
+        .circle:nth-child(1) {
+            background: var(--primary-blue);
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            left: -50px;
+        }
+
+        .circle:nth-child(2) {
+            background: var(--secondary-orange);
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            right: -100px;
+        }
+
+        .circle:nth-child(3) {
+            background: var(--soft-yellow);
+            width: 200px;
+            height: 200px;
+            top: 30%;
+            right: 20%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-orange));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .input-panel {
+            flex: 1;
+            min-width: 300px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--neumorph-shadow-dark), var(--neumorph-shadow-light);
+            transition: var(--transition);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .input-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .input-panel::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .input-panel::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: 10px;
+        }
+
+        .input-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 12px 12px 24px rgba(0, 0, 0, 0.4), 
+                        -12px -12px 24px rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--off-white);
+            opacity: 0.9;
+        }
+
+        textarea, input[type="text"], .custom-select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--off-white);
+            font-size: 1rem;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        textarea:focus, input[type="text"]:focus, .custom-select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(0, 174, 239, 0.3);
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .color-option {
+            flex: 1;
+        }
+
+        .color-display {
+            width: 100%;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .color-display:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0, 174, 239, 0.3);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), #007bff);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 174, 239, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 174, 239, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary-orange), #ff4500);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.6);
+        }
+
+        /* Button click animation */
+        @keyframes btnClick {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-click {
+            animation: btnClick 0.3s ease;
+        }
+
+        .output-panel {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--neumorph-shadow-dark), var(--neumorph-shadow-light);
+            transition: var(--transition);
+        }
+
+        .output-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 12px 12px 24px rgba(0, 0, 0, 0.4), 
+                        -12px -12px 24px rgba(255, 255, 255, 0.1);
+        }
+
+        .barcode-container {
+            width: 100%;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #barcode {
+            max-width: 100%;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .barcode-placeholder {
+            text-align: center;
+            padding: 2rem;
+            opacity: 0.7;
+        }
+
+        .barcode-placeholder i {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .download-options {
+            display: flex;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .download-btn {
+            flex: 1;
+        }
+
+        .barcode-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .barcode-type {
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .barcode-type:hover {
+            background: rgba(0, 174, 239, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .barcode-type i {
+            font-size: 1rem;
+        }
+
+        .barcode-type.active {
+            background: rgba(0, 174, 239, 0.4);
+            border: 1px solid var(--primary-blue);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--neumorph-shadow-dark), var(--neumorph-shadow-light);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 12px 12px 24px rgba(0, 0, 0, 0.4), 
+                        -12px -12px 24px rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-orange));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--off-white);
+        }
+
+        .feature-desc {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--modal-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 90%;
+            width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--modal-text);
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--modal-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--modal-accent);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            margin-bottom: 2rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Color picker modal */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .color-option-btn {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .color-option-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.5);
+        }
+
+        .color-option-btn.selected {
+            border-color: var(--off-white);
+            box-shadow: 0 0 0 3px var(--modal-accent);
+        }
+
+        .color-preview {
+            width: 100%;
+            height: 60px;
+            border-radius: 12px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .hex-input {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--modal-text);
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .hex-input:focus {
+            border-color: var(--modal-accent);
+            box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.3);
+        }
+
+        /* Text customization modal */
+        .text-customization-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .text-customization-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Font family and weight customization */
+        .font-customization {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .font-option {
+            flex: 1;
+        }
+
+        .font-display {
+            width: 100%;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0 1rem;
+        }
+
+        .font-display:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0, 174, 239, 0.3);
+        }
+
+        /* Color slider controls */
+        .color-controls {
+            margin-top: 1.5rem;
+        }
+
+        .color-slider {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .color-slider label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .color-slider input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .color-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .hue-slider {
+            background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+        }
+
+        .hue-slider::-webkit-slider-thumb {
+            background: #ffffff;
+        }
+
+        .saturation-slider {
+            background: linear-gradient(to right, #808080, currentColor);
+        }
+
+        .saturation-slider::-webkit-slider-thumb {
+            background: currentColor;
+        }
+
+        .lightness-slider {
+            background: linear-gradient(to right, #000000, currentColor, #ffffff);
+        }
+
+        .lightness-slider::-webkit-slider-thumb {
+            background: currentColor;
+        }
+
+        /* Ad container */
+        .ad-container {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 2rem 0;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        .ad-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Slider styles */
+        .slider-container {
+            margin: 1.5rem 0;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 174, 239, 0.5);
+        }
+
+        /* Animation classes */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .pulsing {
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .download-options {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .barcode-types {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            
+            .color-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .modal {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            
+            .font-customization {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"></script>
+</head>
+<body>
+    <div class="background-elements">
+        <div class="circle floating" style="animation-delay: 0s;"></div>
+        <div class="circle floating" style="animation-delay: 1s;"></div>
+        <div class="circle floating" style="animation-delay: 2s;"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>BarGen Pro</h1>
+            <p class="subtitle">Advanced barcode generator for retail and inventory</p>
+        </header>
+
+        <!-- Ad Container Top -->
+        <div class="ad-container">
+            <div>
+                <div class="ad-label">Advertisement</div>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                     data-ad-slot="YOUR_AD_SLOT_TOP"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="input-panel">
+                <div class="form-group">
+                    <label for="barcode-content">Barcode Data</label>
+                    <input type="text" id="barcode-content" placeholder="Enter numbers/text to encode">
+                </div>
+
+                <div class="form-group">
+                    <label>Barcode Type</label>
+                    <div class="barcode-types">
+                        <div class="barcode-type active" data-type="CODE128">
+                            <i class="fas fa-barcode"></i> CODE128
+                        </div>
+                        <div class="barcode-type" data-type="EAN13">
+                            <i class="fas fa-barcode"></i> EAN-13
+                        </div>
+                        <div class="barcode-type" data-type="UPC">
+                            <i class="fas fa-barcode"></i> UPC-A
+                        </div>
+                        <div class="barcode-type" data-type="ITF">
+                            <i class="fas fa-barcode"></i> ITF
+                        </div>
+                        <div class="barcode-type" data-type="ISBN">
+                            <i class="fas fa-book"></i> ISBN
+                        </div>
+                        <div class="barcode-type" data-type="CODE39">
+                            <i class="fas fa-barcode"></i> CODE39
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="barcode-width">Width: <span id="width-value">2px</span></label>
+                    <div class="slider-container">
+                        <input type="range" id="barcode-width" min="1" max="5" step="0.1" value="2">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="barcode-height">Height: <span id="height-value">100px</span></label>
+                    <div class="slider-container">
+                        <input type="range" id="barcode-height" min="50" max="300" value="100">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Color Customization</label>
+                    <div class="color-picker">
+                        <div class="color-option">
+                            <label for="barcode-fg-color">Barcode Color</label>
+                            <div class="color-display" id="fg-color-display" style="background-color: #000000;"></div>
+                            <input type="hidden" id="barcode-fg-color" value="#000000">
+                        </div>
+                        <div class="color-option">
+                            <label for="barcode-bg-color">Background</label>
+                            <div class="color-display" id="bg-color-display" style="background-color: #ffffff;"></div>
+                            <input type="hidden" id="barcode-bg-color" value="#ffffff">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="barcode-text">Display Text</label>
+                    <div class="text-display" id="text-display" style="background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1rem; cursor: pointer;">
+                        <span id="current-text-display">Below barcode</span>
+                        <i class="fas fa-chevron-down" style="float: right;"></i>
+                    </div>
+                    <input type="hidden" id="barcode-text" value="bottom">
+                    <input type="hidden" id="barcode-font-family" value="Arial, sans-serif">
+                    <input type="hidden" id="barcode-font-weight" value="bold">
+                </div>
+
+                <div class="form-group">
+                    <label for="barcode-font">Font Size: <span id="font-value">14px</span></label>
+                    <div class="slider-container">
+                        <input type="range" id="barcode-font" min="8" max="24" value="14">
+                    </div>
+                </div>
+
+                <button id="generate-btn" class="btn btn-primary">
+                    <i class="fas fa-barcode"></i> Generate Barcode
+                </button>
+            </div>
+
+            <div class="output-panel">
+                <div class="barcode-container">
+                    <canvas id="barcode" style="border-radius: 12px;"></canvas>
+                    <div class="barcode-placeholder">
+                        <i class="fas fa-barcode"></i>
+                        <p>Your barcode will appear here</p>
+                    </div>
+                </div>
+
+                <div class="download-options">
+                    <button id="download-png" class="btn btn-secondary download-btn" disabled>
+                        <i class="fas fa-download"></i> PNG
+                    </button>
+                    <button id="download-svg" class="btn btn-secondary download-btn" disabled>
+                        <i class="fas fa-download"></i> SVG
+                    </button>
+                    <button id="download-pdf" class="btn btn-secondary download-btn" disabled>
+                        <i class="fas fa-download"></i> PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Container Middle -->
+        <div class="ad-container">
+            <div>
+                <div class="ad-label">Advertisement</div>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                     data-ad-slot="YOUR_AD_SLOT_MIDDLE"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-barcode"></i>
+                </div>
+                <h3 class="feature-title">Multiple Barcode Types</h3>
+                <p class="feature-desc">Generate all standard barcode formats including CODE128, EAN-13, UPC-A, ISBN, ITF and CODE39 for any use case.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-paint-brush"></i>
+                </div>
+                <h3 class="feature-title">Customizable Design</h3>
+                <p class="feature-desc">Adjust colors, dimensions, text display and more to match your branding and packaging requirements.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-file-export"></i>
+                </div>
+                <h3 class="feature-title">Multiple Export Formats</h3>
+                <p class="feature-desc">Download your barcodes in PNG, SVG or PDF formats for printing or digital use.</p>
+            </div>
+        </div>
+
+        <!-- Ad Container Bottom -->
+        <div class="ad-container">
+            <div>
+                <div class="ad-label">Advertisement</div>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                     data-ad-slot="YOUR_AD_SLOT_BOTTOM"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; <span id="current-year"></span> BarGen Pro. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Color Picker Modal -->
+    <div class="modal-overlay" id="color-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Select Color</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="color-grid">
+                    <div class="color-option-btn" style="background: #000000;" data-color="#000000"></div>
+                    <div class="color-option-btn" style="background: #ffffff;" data-color="#ffffff"></div>
+                    <div class="color-option-btn" style="background: #003B46;" data-color="#003B46"></div>
+                    <div class="color-option-btn" style="background: #00AEEF;" data-color="#00AEEF"></div>
+                    <div class="color-option-btn" style="background: #007bff;" data-color="#007bff"></div>
+                    <div class="color-option-btn" style="background: #FF8C00;" data-color="#FF8C00"></div>
+                    <div class="color-option-btn" style="background: #FFD700;" data-color="#FFD700"></div>
+                    <div class="color-option-btn" style="background: #ff4500;" data-color="#ff4500"></div>
+                    <div class="color-option-btn" style="background: #00bcd4;" data-color="#00bcd4"></div>
+                    <div class="color-option-btn" style="background: #00ffab;" data-color="#00ffab"></div>
+                    <div class="color-option-btn" style="background: #8a2be2;" data-color="#8a2be2"></div>
+                    <div class="color-option-btn" style="background: #ff1493;" data-color="#ff1493"></div>
+                    <div class="color-option-btn" style="background: #32cd32;" data-color="#32cd32"></div>
+                    <div class="color-option-btn" style="background: #ff6347;" data-color="#ff6347"></div>
+                    <div class="color-option-btn" style="background: #9370db;" data-color="#9370db"></div>
+                </div>
+                
+                <div class="color-preview" id="modal-color-preview">Selected Color</div>
+                
+                <div class="color-controls">
+                    <div class="color-slider">
+                        <label>
+                            <span>Hue</span>
+                            <span id="hue-value">0°</span>
+                        </label>
+                        <input type="range" id="hue-slider" class="hue-slider" min="0" max="360" value="0">
+                    </div>
+                    
+                    <div class="color-slider">
+                        <label>
+                            <span>Saturation</span>
+                            <span id="saturation-value">100%</span>
+                        </label>
+                        <input type="range" id="saturation-slider" class="saturation-slider" min="0" max="100" value="100">
+                    </div>
+                    
+                    <div class="color-slider">
+                        <label>
+                            <span>Lightness</span>
+                            <span id="lightness-value">50%</span>
+                        </label>
+                        <input type="range" id="lightness-slider" class="lightness-slider" min="0" max="100" value="50">
+                    </div>
+                </div>
+                
+                <input type="text" class="hex-input" id="hex-input" placeholder="Enter HEX color (e.g. #00AEEF)" maxlength="7">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="color-cancel">Cancel</button>
+                <button class="btn btn-primary" id="color-confirm">Set Color</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Text Display Modal -->
+    <div class="modal-overlay" id="text-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Text Display Options</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="text-customization-group">
+                    <label>Text Position</label>
+                    <div class="barcode-types">
+                        <div class="barcode-type active" data-text-option="bottom">
+                            <i class="fas fa-align-center"></i> Below barcode
+                        </div>
+                        <div class="barcode-type" data-text-option="top">
+                            <i class="fas fa-align-center"></i> Above barcode
+                        </div>
+                        <div class="barcode-type" data-text-option="both">
+                            <i class="fas fa-align-justify"></i> Above and below
+                        </div>
+                        <div class="barcode-type" data-text-option="none">
+                            <i class="fas fa-eye-slash"></i> No text
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-customization-group">
+                    <label>Font Customization</label>
+                    <div class="font-customization">
+                        <div class="font-option">
+                            <label for="font-family-display">Font Family</label>
+                            <div class="font-display" id="font-family-display">
+                                Arial
+                            </div>
+                            <input type="hidden" id="barcode-font-family" value="Arial, sans-serif">
+                        </div>
+                        <div class="font-option">
+                            <label for="font-weight-display">Font Weight</label>
+                            <div class="font-display" id="font-weight-display">
+                                Bold
+                            </div>
+                            <input type="hidden" id="barcode-font-weight" value="bold">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Font Family Modal -->
+                <div class="modal-overlay" id="font-family-modal">
+                    <div class="modal">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Select Font Family</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="barcode-types">
+                                <div class="barcode-type active" data-font-family="Arial, sans-serif">
+                                    Arial
+                                </div>
+                                <div class="barcode-type" data-font-family="'Courier New', monospace">
+                                    Courier New
+                                </div>
+                                <div class="barcode-type" data-font-family="'Times New Roman', serif">
+                                    Times New Roman
+                                </div>
+                                <div class="barcode-type" data-font-family="'Poppins', sans-serif">
+                                    Poppins
+                                </div>
+                                <div class="barcode-type" data-font-family="'Roboto', sans-serif">
+                                    Roboto
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" id="font-family-cancel">Cancel</button>
+                            <button class="btn btn-primary" id="font-family-confirm">Select</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Font Weight Modal -->
+                <div class="modal-overlay" id="font-weight-modal">
+                    <div class="modal">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Select Font Weight</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="barcode-types">
+                                <div class="barcode-type active" data-font-weight="normal">
+                                    Normal
+                                </div>
+                                <div class="barcode-type" data-font-weight="bold">
+                                    Bold
+                                </div>
+                                <div class="barcode-type" data-font-weight="bolder">
+                                    Bolder
+                                </div>
+                                <div class="barcode-type" data-font-weight="lighter">
+                                    Lighter
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" id="font-weight-cancel">Cancel</button>
+                            <button class="btn btn-primary" id="font-weight-confirm">Select</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="text-cancel">Cancel</button>
+                <button class="btn btn-primary" id="text-confirm">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JsBarcode library -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <!-- PDF generation library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Canvas to Image library -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <!-- Color conversion library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinycolor/1.6.0/tinycolor.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // DOM elements
+            const barcodeContent = document.getElementById('barcode-content');
+            const barcodeTypeElements = document.querySelectorAll('.barcode-type');
+            const barcodeWidth = document.getElementById('barcode-width');
+            const widthValue = document.getElementById('width-value');
+            const barcodeHeight = document.getElementById('barcode-height');
+            const heightValue = document.getElementById('height-value');
+            const barcodeFgColor = document.getElementById('barcode-fg-color');
+            const barcodeBgColor = document.getElementById('barcode-bg-color');
+            const barcodeText = document.getElementById('barcode-text');
+            const barcodeFontFamily = document.getElementById('barcode-font-family');
+            const barcodeFontWeight = document.getElementById('barcode-font-weight');
+            const currentTextDisplay = document.getElementById('current-text-display');
+            const textDisplay = document.getElementById('text-display');
+            const barcodeFont = document.getElementById('barcode-font');
+            const fontValue = document.getElementById('font-value');
+            const generateBtn = document.getElementById('generate-btn');
+            const barcodeCanvas = document.getElementById('barcode');
+            const barcodePlaceholder = document.querySelector('.barcode-placeholder');
+            const downloadPng = document.getElementById('download-png');
+            const downloadSvg = document.getElementById('download-svg');
+            const downloadPdf = document.getElementById('download-pdf');
+            const fgColorDisplay = document.getElementById('fg-color-display');
+            const bgColorDisplay = document.getElementById('bg-color-display');
+            
+            // Modal elements
+            const colorModal = document.getElementById('color-modal');
+            const textModal = document.getElementById('text-modal');
+            const fontFamilyModal = document.getElementById('font-family-modal');
+            const fontWeightModal = document.getElementById('font-weight-modal');
+            const colorOptions = document.querySelectorAll('.color-option-btn');
+            const modalColorPreview = document.getElementById('modal-color-preview');
+            const hexInput = document.getElementById('hex-input');
+            const colorConfirm = document.getElementById('color-confirm');
+            const colorCancel = document.getElementById('color-cancel');
+            const textConfirm = document.getElementById('text-confirm');
+            const textCancel = document.getElementById('text-cancel');
+            const textOptions = document.querySelectorAll('[data-text-option]');
+            const fontFamilyDisplay = document.getElementById('font-family-display');
+            const fontWeightDisplay = document.getElementById('font-weight-display');
+            const fontFamilyOptions = document.querySelectorAll('[data-font-family]');
+            const fontWeightOptions = document.querySelectorAll('[data-font-weight]');
+            const fontFamilyConfirm = document.getElementById('font-family-confirm');
+            const fontFamilyCancel = document.getElementById('font-family-cancel');
+            const fontWeightConfirm = document.getElementById('font-weight-confirm');
+            const fontWeightCancel = document.getElementById('font-weight-cancel');
+            const modalCloses = document.querySelectorAll('.modal-close');
+            
+            // Color slider elements
+            const hueSlider = document.getElementById('hue-slider');
+            const saturationSlider = document.getElementById('saturation-slider');
+            const lightnessSlider = document.getElementById('lightness-slider');
+            const hueValue = document.getElementById('hue-value');
+            const saturationValue = document.getElementById('saturation-value');
+            const lightnessValue = document.getElementById('lightness-value');
+
+            // State variables
+            let currentBarcodeType = 'CODE128';
+            let currentColorPicker = null; // 'fg' or 'bg'
+            let selectedColor = '#000000';
+            let currentHue = 0;
+            let currentSaturation = 100;
+            let currentLightness = 50;
+            let currentTextPosition = 'bottom';
+            let currentFontFamily = 'Arial, sans-serif';
+            let currentFontWeight = 'bold';
+            let selectedFontFamily = 'Arial, sans-serif';
+            let selectedFontWeight = 'bold';
+
+            // Add click animations to buttons
+            const buttons = document.querySelectorAll('.btn, .barcode-type');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.classList.contains('btn')) {
+                        this.classList.add('btn-click');
+                        setTimeout(() => {
+                            this.classList.remove('btn-click');
+                        }, 300);
+                    }
+                });
+            });
+
+            // Update slider value displays
+            widthValue.textContent = `${barcodeWidth.value}px`;
+            heightValue.textContent = `${barcodeHeight.value}px`;
+            fontValue.textContent = `${barcodeFont.value}px`;
+
+            barcodeWidth.addEventListener('input', function() {
+                widthValue.textContent = `${this.value}px`;
+            });
+
+            barcodeHeight.addEventListener('input', function() {
+                heightValue.textContent = `${this.value}px`;
+            });
+
+            barcodeFont.addEventListener('input', function() {
+                fontValue.textContent = `${this.value}px`;
+            });
+
+            // Barcode type selection
+            barcodeTypeElements.forEach(type => {
+                type.addEventListener('click', function() {
+                    barcodeTypeElements.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentBarcodeType = this.getAttribute('data-type');
+                });
+            });
+
+            // Text display click handler
+            textDisplay.addEventListener('click', function() {
+                openTextModal();
+            });
+
+            // Font family display click handler
+            fontFamilyDisplay.addEventListener('click', function() {
+                openFontFamilyModal();
+            });
+
+            // Font weight display click handler
+            fontWeightDisplay.addEventListener('click', function() {
+                openFontWeightModal();
+            });
+
+            // Text option selection
+            textOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    textOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    currentTextPosition = this.getAttribute('data-text-option');
+                });
+            });
+
+            // Font family option selection
+            fontFamilyOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    fontFamilyOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedFontFamily = this.getAttribute('data-font-family');
+                });
+            });
+
+            // Font weight option selection
+            fontWeightOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    fontWeightOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedFontWeight = this.getAttribute('data-font-weight');
+                });
+            });
+
+            // Color picker display click handlers
+            fgColorDisplay.addEventListener('click', function() {
+                currentColorPicker = 'fg';
+                openColorModal(fgColorDisplay.style.backgroundColor);
+            });
+
+            bgColorDisplay.addEventListener('click', function() {
+                currentColorPicker = 'bg';
+                openColorModal(bgColorDisplay.style.backgroundColor);
+            });
+
+            // Text modal functionality
+            function openTextModal() {
+                // Set current selections
+                textOptions.forEach(option => {
+                    option.classList.remove('active');
+                    if (option.getAttribute('data-text-option') === currentTextPosition) {
+                        option.classList.add('active');
+                    }
+                });
+                
+                textModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            // Font family modal functionality
+            function openFontFamilyModal() {
+                // Set current selection
+                fontFamilyOptions.forEach(option => {
+                    option.classList.remove('active');
+                    if (option.getAttribute('data-font-family') === currentFontFamily) {
+                        option.classList.add('active');
+                        selectedFontFamily = currentFontFamily;
+                    }
+                });
+                
+                fontFamilyModal.classList.add('active');
+            }
+
+            // Font weight modal functionality
+            function openFontWeightModal() {
+                // Set current selection
+                fontWeightOptions.forEach(option => {
+                    option.classList.remove('active');
+                    if (option.getAttribute('data-font-weight') === currentFontWeight) {
+                        option.classList.add('active');
+                        selectedFontWeight = currentFontWeight;
+                    }
+                });
+                
+                fontWeightModal.classList.add('active');
+            }
+
+            // Color modal functionality
+            function openColorModal(currentColor) {
+                selectedColor = currentColor;
+                
+                // Convert current color to HSL
+                const hsl = tinycolor(selectedColor).toHsl();
+                currentHue = Math.round(hsl.h);
+                currentSaturation = Math.round(hsl.s * 100);
+                currentLightness = Math.round(hsl.l * 100);
+                
+                // Update sliders
+                hueSlider.value = currentHue;
+                saturationSlider.value = currentSaturation;
+                lightnessSlider.value = currentLightness;
+                
+                // Update display values
+                hueValue.textContent = `${currentHue}°`;
+                saturationValue.textContent = `${currentSaturation}%`;
+                lightnessValue.textContent = `${currentLightness}%`;
+                
+                // Update color preview
+                updateColorPreview();
+                
+                // Update selected state in color grid
+                colorOptions.forEach(option => {
+                    option.classList.remove('selected');
+                    if (option.getAttribute('data-color').toLowerCase() === selectedColor.toLowerCase()) {
+                        option.classList.add('selected');
+                    }
+                });
+                
+                hexInput.value = selectedColor;
+                colorModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            // Update color preview based on HSL values
+            function updateColorPreview() {
+                selectedColor = tinycolor({
+                    h: currentHue,
+                    s: currentSaturation / 100,
+                    l: currentLightness / 100
+                }).toHexString();
+                
+                modalColorPreview.style.backgroundColor = selectedColor;
+                modalColorPreview.textContent = selectedColor;
+                hexInput.value = selectedColor;
+                
+                // Update saturation and lightness slider colors
+                saturationSlider.style.setProperty('--current-color', `hsl(${currentHue}, 100%, 50%)`);
+                lightnessSlider.style.setProperty('--current-color', `hsl(${currentHue}, ${currentSaturation}%, 50%)`);
+            }
+
+            // Color slider event listeners
+            hueSlider.addEventListener('input', function() {
+                currentHue = parseInt(this.value);
+                hueValue.textContent = `${currentHue}°`;
+                updateColorPreview();
+            });
+
+            saturationSlider.addEventListener('input', function() {
+                currentSaturation = parseInt(this.value);
+                saturationValue.textContent = `${currentSaturation}%`;
+                updateColorPreview();
+            });
+
+            lightnessSlider.addEventListener('input', function() {
+                currentLightness = parseInt(this.value);
+                lightnessValue.textContent = `${currentLightness}%`;
+                updateColorPreview();
+            });
+
+            // Color option selection
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    colorOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedColor = this.getAttribute('data-color');
+                    
+                    // Convert selected color to HSL
+                    const hsl = tinycolor(selectedColor).toHsl();
+                    currentHue = Math.round(hsl.h);
+                    currentSaturation = Math.round(hsl.s * 100);
+                    currentLightness = Math.round(hsl.l * 100);
+                    
+                    // Update sliders
+                    hueSlider.value = currentHue;
+                    saturationSlider.value = currentSaturation;
+                    lightnessSlider.value = currentLightness;
+                    
+                    // Update display values
+                    hueValue.textContent = `${currentHue}°`;
+                    saturationValue.textContent = `${currentSaturation}%`;
+                    lightnessValue.textContent = `${currentLightness}%`;
+                    
+                    updateColorPreview();
+                });
+            });
+
+            // HEX input handling
+            hexInput.addEventListener('input', function() {
+                const value = this.value;
+                if (value.match(/^#[0-9A-Fa-f]{6}$/)) {
+                    selectedColor = value;
+                    
+                    // Convert to HSL
+                    const hsl = tinycolor(selectedColor).toHsl();
+                    currentHue = Math.round(hsl.h);
+                    currentSaturation = Math.round(hsl.s * 100);
+                    currentLightness = Math.round(hsl.l * 100);
+                    
+                    // Update sliders
+                    hueSlider.value = currentHue;
+                    saturationSlider.value = currentSaturation;
+                    lightnessSlider.value = currentLightness;
+                    
+                    // Update display values
+                    hueValue.textContent = `${currentHue}°`;
+                    saturationValue.textContent = `${currentSaturation}%`;
+                    lightnessValue.textContent = `${currentLightness}%`;
+                    
+                    updateColorPreview();
+                    
+                    // Update selected state in color grid
+                    colorOptions.forEach(option => {
+                        option.classList.remove('selected');
+                        if (option.getAttribute('data-color').toLowerCase() === value.toLowerCase()) {
+                            option.classList.add('selected');
+                        }
+                    });
+                }
+            });
+
+            // Color confirm button
+            colorConfirm.addEventListener('click', function() {
+                if (currentColorPicker === 'fg') {
+                    barcodeFgColor.value = selectedColor;
+                    fgColorDisplay.style.backgroundColor = selectedColor;
+                } else {
+                    barcodeBgColor.value = selectedColor;
+                    bgColorDisplay.style.backgroundColor = selectedColor;
+                }
+                closeModal(colorModal);
+            });
+
+            // Font family confirm button
+            fontFamilyConfirm.addEventListener('click', function() {
+                currentFontFamily = selectedFontFamily;
+                fontFamilyDisplay.textContent = selectedFontFamily.split(',')[0].replace(/'/g, '');
+                closeModal(fontFamilyModal);
+            });
+
+            // Font weight confirm button
+            fontWeightConfirm.addEventListener('click', function() {
+                currentFontWeight = selectedFontWeight;
+                fontWeightDisplay.textContent = selectedFontWeight.charAt(0).toUpperCase() + selectedFontWeight.slice(1);
+                closeModal(fontWeightModal);
+            });
+
+            // Text confirm button
+            textConfirm.addEventListener('click', function() {
+                currentTextPosition = document.querySelector('[data-text-option].active').getAttribute('data-text-option');
+                
+                // Update display text
+                const textOptions = {
+                    'bottom': 'Below barcode',
+                    'top': 'Above barcode',
+                    'both': 'Above and below',
+                    'none': 'No text'
+                };
+                currentTextDisplay.textContent = textOptions[currentTextPosition];
+                barcodeText.value = currentTextPosition;
+                barcodeFontFamily.value = currentFontFamily;
+                barcodeFontWeight.value = currentFontWeight;
+                
+                closeModal(textModal);
+            });
+
+            // Cancel buttons
+            colorCancel.addEventListener('click', function() {
+                closeModal(colorModal);
+            });
+
+            textCancel.addEventListener('click', function() {
+                closeModal(textModal);
+            });
+
+            fontFamilyCancel.addEventListener('click', function() {
+                closeModal(fontFamilyModal);
+            });
+
+            fontWeightCancel.addEventListener('click', function() {
+                closeModal(fontWeightModal);
+            });
+
+            // Modal close buttons
+            modalCloses.forEach(closeBtn => {
+                closeBtn.addEventListener('click', function() {
+                    const modal = this.closest('.modal-overlay');
+                    closeModal(modal);
+                });
+            });
+
+            // Close modal when clicking outside
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeModal(this);
+                    }
+                });
+            });
+
+            function closeModal(modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            // Download buttons
+            downloadPng.addEventListener('click', downloadPNG);
+            downloadSvg.addEventListener('click', downloadSVG);
+            downloadPdf.addEventListener('click', downloadPDF);
+
+            // Generate barcode
+            generateBtn.addEventListener('click', generateBarcode);
+
+            function generateBarcode() {
+                const content = barcodeContent.value.trim();
+                const width = parseFloat(barcodeWidth.value);
+                const height = parseInt(barcodeHeight.value);
+                const fgColor = barcodeFgColor.value;
+                const bgColor = barcodeBgColor.value;
+                const displayText = currentTextPosition;
+                const fontSize = parseInt(barcodeFont.value);
+                const fontFamily = barcodeFontFamily.value;
+                const fontWeight = barcodeFontWeight.value;
+
+                if (!content) {
+                    showNotification('Please enter some content to generate a barcode', 'error');
+                    return;
+                }
+
+                // Validate content based on barcode type
+                if (!validateBarcodeContent(content, currentBarcodeType)) {
+                    return;
+                }
+
+                // Clear previous barcode
+                barcodeCanvas.innerHTML = '';
+                
+                // Show loading state
+                barcodePlaceholder.innerHTML = '<i class="fas fa-spinner fa-spin"></i><p>Generating Barcode...</p>';
+                barcodePlaceholder.style.display = 'flex';
+                barcodePlaceholder.style.flexDirection = 'column';
+                barcodePlaceholder.style.alignItems = 'center';
+                barcodePlaceholder.style.justifyContent = 'center';
+                barcodeCanvas.style.display = 'none';
+
+                // Generate new barcode with slight delay for better UX
+                setTimeout(() => {
+                    try {
+                        const options = {
+                            width: width,
+                            height: height,
+                            displayValue: displayText !== 'none',
+                            font: fontFamily,
+                            fontOptions: fontWeight,
+                            fontSize: fontSize,
+                            textMargin: 5,
+                            margin: 10,
+                            lineColor: fgColor,
+                            background: bgColor
+                        };
+
+                        // Special options for specific barcode types
+                        switch(currentBarcodeType) {
+                            case 'EAN13':
+                                options.format = 'EAN13';
+                                break;
+                            case 'UPC':
+                                options.format = 'UPC';
+                                break;
+                            case 'ITF':
+                                options.format = 'ITF';
+                                options.flat = true;
+                                break;
+                            case 'ISBN':
+                                options.format = 'EAN13';
+                                break;
+                            case 'CODE39':
+                                options.format = 'CODE39';
+                                break;
+                            default:
+                                options.format = 'CODE128';
+                        }
+
+                        // Position text based on selection
+                        if (displayText === 'top') {
+                            options.textPosition = 'top';
+                        } else if (displayText === 'both') {
+                            options.textPosition = 'top';
+                            options.textAlign = 'center';
+                        }
+
+                        // Generate the barcode
+                        JsBarcode(barcodeCanvas, content, options);
+                        
+                        // Hide placeholder and show barcode
+                        barcodePlaceholder.style.display = 'none';
+                        barcodeCanvas.style.display = 'block';
+
+                        // Enable download buttons
+                        downloadPng.disabled = false;
+                        downloadSvg.disabled = false;
+                        downloadPdf.disabled = false;
+                        downloadPng.classList.add('pulsing');
+                        downloadSvg.classList.add('pulsing');
+                        downloadPdf.classList.add('pulsing');
+
+                        // Show success notification
+                        showNotification('Barcode generated successfully!', 'success');
+                    } catch (err) {
+                        console.error(err);
+                        showNotification('Error generating barcode. Please check your input.', 'error');
+                        barcodePlaceholder.innerHTML = '<i class="fas fa-exclamation-triangle"></i><p>Error generating barcode</p>';
+                    }
+                }, 500);
+            }
+
+            function validateBarcodeContent(content, type) {
+                switch(type) {
+                    case 'EAN13':
+                        if (!/^\d{12,13}$/.test(content)) {
+                            showNotification('EAN-13 requires 12 or 13 digits', 'error');
+                            return false;
+                        }
+                        break;
+                    case 'UPC':
+                        if (!/^\d{11,12}$/.test(content)) {
+                            showNotification('UPC-A requires 11 or 12 digits', 'error');
+                            return false;
+                        }
+                        break;
+                    case 'ITF':
+                        case 'ISBN':
+                        case 'CODE39':
+                        case 'CODE128':
+                        default:
+                            // Most other types accept alphanumeric
+                            if (content.length === 0) {
+                                showNotification('Please enter barcode content', 'error');
+                                return false;
+                            }
+                }
+                return true;
+            }
+
+            function downloadPNG() {
+                html2canvas(barcodeCanvas).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = `barcode-${currentBarcodeType.toLowerCase()}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    
+                    showNotification('PNG download started', 'success');
+                });
+            }
+
+            function downloadSVG() {
+                // Convert canvas to SVG
+                const svg = `
+                    <svg xmlns="http://www.w3.org/2000/svg" 
+                         width="${barcodeCanvas.width}" 
+                         height="${barcodeCanvas.height}" 
+                         viewBox="0 0 ${barcodeCanvas.width} ${barcodeCanvas.height}">
+                        <foreignObject width="100%" height="100%">
+                            <div xmlns="http://www.w3.org/1999/xhtml">
+                                ${barcodeCanvas.outerHTML}
+                            </div>
+                        </foreignObject>
+                    </svg>
+                `;
+                
+                const blob = new Blob([svg], {type: 'image/svg+xml'});
+                const url = URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.download = `barcode-${currentBarcodeType.toLowerCase()}.svg`;
+                link.href = url;
+                link.click();
+                
+                showNotification('SVG download started', 'success');
+            }
+
+            function downloadPDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'mm'
+                });
+                
+                // Convert canvas to image
+                html2canvas(barcodeCanvas).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const imgWidth = 100; // mm
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    
+                    doc.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                    doc.save(`barcode-${currentBarcodeType.toLowerCase()}.pdf`);
+                    
+                    showNotification('PDF download started', 'success');
+                });
+            }
+
+            function showNotification(message, type) {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                
+                // Style the notification
+                notification.style.position = 'fixed';
+                notification.style.bottom = '20px';
+                notification.style.right = '20px';
+                notification.style.padding = '15px 25px';
+                notification.style.borderRadius = '12px';
+                notification.style.color = 'white';
+                notification.style.fontWeight = '500';
+                notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
+                notification.style.zIndex = '1000';
+                notification.style.transform = 'translateY(100px)';
+                notification.style.opacity = '0';
+                notification.style.transition = 'all 0.3s ease';
+                
+                // Set background based on type
+                if (type === 'error') {
+                    notification.style.background = 'linear-gradient(135deg, #ff4d4d, #cc0000)';
+                } else {
+                    notification.style.background = 'linear-gradient(135deg, var(--primary-blue), #007bff)';
+                }
+                
+                document.body.appendChild(notification);
+                
+                // Show notification
+                setTimeout(() => {
+                    notification.style.transform = 'translateY(0)';
+                    notification.style.opacity = '1';
+                }, 10);
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    notification.style.transform = 'translateY(100px)';
+                    notification.style.opacity = '0';
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 300);
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
