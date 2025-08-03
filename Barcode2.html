@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoBar Pro - Advanced Barcode Generator</title>
+    <meta name="description" content="Generate custom barcodes with various formats. Free online barcode generator for products, inventory, and more.">
+    <meta name="keywords" content="barcode generator, custom barcode, barcode creator, free barcode">
+    <meta name="author" content="NeoBar Pro">
+    <style>
+        :root {
+            --primary-blue: #00aeef;
+            --secondary-orange: #ff8c00;
+            --deep-teal: #003b46;
+            --soft-yellow: #ffd700;
+            --off-white: #f5f5f5;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --neumorph-shadow-dark: 8px 8px 16px rgba(0, 0, 0, 0.3);
+            --neumorph-shadow-light: -8px -8px 16px rgba(255, 255, 255, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --modal-bg: #1c1c2e;
+            --modal-text: #e0e0e0;
+            --modal-accent: #00bcd4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--deep-teal), #001f27);
+            color: var(--off-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .background-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+        }
+
+        .circle:nth-child(1) {
+            background: var(--primary-blue);
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            left: -50px;
+        }
+
+        .circle:nth-child(2) {
+            background: var(--secondary-orange);
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            right: -100px;
+        }
+
+        .circle:nth-child(3) {
+            background: var(--soft-yellow);
+            width: 200px;
+            height: 200px;
+            top: 30%;
+            right: 20%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-orange));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .input-panel {
+            flex: 1;
+            min-width: 300px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--neumorph-shadow-dark), var(--neumorph-shadow-light);
+            transition: var(--transition);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .input-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .input-panel::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .input-panel::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: 10px;
+        }
+
+        .input-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 12px 12px 24px rgba(0, 0, 0, 0.4), 
+                        -12px -12px 24px rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--off-white);
+            opacity: 0.9;
+        }
+
+        textarea, input[type="text"], .custom-select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--off-white);
+            font-size: 1rem;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        textarea:focus, input[type="text"]:focus, .custom-select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(0, 174, 239, 0.3);
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .color-option {
+            flex: 1;
+        }
+
+        .color-display {
+            width: 100%;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .color-display:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0, 174, 239, 0.3);
+        }
+
+        .gradient-presets {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .gradient-preset {
+            height: 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .gradient-preset:hover {
+            transform: scale(1.05);
+        }
+
+        .gradient-preset.active {
+            border-color: var(--off-white);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .slider-container {
+            margin: 1.5rem 0;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 174, 239, 0.5);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), #007bff);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 174, 239, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 174, 239, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary-orange), #ff4500);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.6);
+        }
+
+        /* Button click animation */
+        @keyframes btnClick {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-click {
+            animation: btnClick 0.3s ease;
+        }
+
+        /* Logo click animation */
+        @keyframes logoClick {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+
+        .logo-click {
+            animation: logoClick 0.3s ease;
+        }
+
+        .output-panel {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--neumorph-shadow-dark), var(--neumorph-shadow-light);
+            transition: var(--transition);
+        }
+
+        .output-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 12px 12px 24px rgba(0, 0, 0, 0.4), 
+                        -12px -12px 24px rgba(255, 255, 255, 0.1);
+        }
+
+        .barcode-container {
+            width: 100%;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            padding: 1rem;
+        }
+
+        #barcode {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+        }
+
+        .barcode-placeholder {
+            text-align: center;
+            padding: 2rem;
+            opacity: 0.7;
+        }
+
+        .barcode-placeholder i {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .download-options {
+            display: flex;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .download-btn {
+            flex: 1;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .quick-link {
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .quick-link:hover {
+            background: rgba(0, 174, 239, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .quick-link i {
+            font-size: 1rem;
+        }
+
+        .text-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .text-option {
+            flex: 1;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--neumorph-shadow-dark), var(--neumorph-shadow-light);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 12px 12px 24px rgba(0, 0, 0, 0.4), 
+                        -12px -12px 24px rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-orange));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--off-white);
+        }
+
+        .feature-desc {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--modal-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 90%;
+            width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--modal-text);
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--modal-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--modal-accent);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            margin-bottom: 2rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Color picker modal */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .color-option-btn {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .color-option-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.5);
+        }
+
+        .color-option-btn.selected {
+            border-color: var(--off-white);
+            box-shadow: 0 0 0 3px var(--modal-accent);
+        }
+
+        .color-preview {
+            width: 100%;
+            height: 60px;
+            border-radius: 12px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .hex-input {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--modal-text);
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .hex-input:focus {
+            border-color: var(--modal-accent);
+            box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.3);
+        }
+
+        /* Barcode type modal */
+        .barcode-type-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .barcode-type-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .barcode-type-option:hover {
+            background: rgba(0, 188, 212, 0.1);
+            transform: translateX(5px);
+        }
+
+        .barcode-type-option.selected {
+            border-color: var(--modal-accent);
+            background: rgba(0, 188, 212, 0.2);
+        }
+
+        .barcode-type-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            color: var(--modal-accent);
+        }
+
+        .barcode-type-label {
+            flex: 1;
+        }
+
+        .barcode-type-desc {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 0.3rem;
+        }
+
+        .barcode-type-radio {
+            display: none;
+        }
+
+        /* Ad container */
+        .ad-container {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 2rem 0;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        .ad-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Text options */
+        .text-option-group {
+            margin-bottom: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+        }
+
+        .text-option-title {
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .text-option-buttons {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .text-option-btn {
+            padding: 0.6rem 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .text-option-btn:hover {
+            background: rgba(0, 174, 239, 0.2);
+        }
+
+        .text-option-btn.active {
+            background: rgba(0, 174, 239, 0.4);
+            border-color: var(--primary-blue);
+        }
+
+        .text-option-btn i {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .download-options {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .quick-links {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            
+            .color-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .modal {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            
+            .text-option-buttons {
+                gap: 0.5rem;
+            }
+            
+            .text-option-btn {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Animation classes */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .pulsing {
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tab-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            position: relative;
+            opacity: 0.7;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            opacity: 1;
+            font-weight: 500;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-orange));
+            border-radius: 3px 3px 0 0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-elements">
+        <div class="circle floating" style="animation-delay: 0s;"></div>
+        <div class="circle floating" style="animation-delay: 1s;"></div>
+        <div class="circle floating" style="animation-delay: 2s;"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>NeoBar Pro</h1>
+            <p class="subtitle">Advanced barcode generator with multiple formats</p>
+        </header>
+
+        <!-- Ad Container Top -->
+        <div class="ad-container">
+            <div>
+                <div class="ad-label">Advertisement</div>
+                <!-- Replace with your Google AdSense code -->
+                <div id="ad-top">
+                    <!-- Example: <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"></script> -->
+                    <!-- Example: <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-YOUR_PUBLISHER_ID" data-ad-slot="YOUR_AD_SLOT" data-ad-format="auto" data-full-width-responsive="true"></ins> -->
+                    <!-- Example: <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="input-panel">
+                <div class="tab-container">
+                    <div class="tab active" data-tab="product">Product</div>
+                    <div class="tab" data-tab="inventory">Inventory</div>
+                    <div class="tab" data-tab="custom">Custom</div>
+                </div>
+
+                <div class="tab-content active" id="product-tab">
+                    <div class="form-group">
+                        <label for="barcode-content">Product Code</label>
+                        <input type="text" id="barcode-content" placeholder="Enter product code (EAN, UPC, etc.)">
+                    </div>
+                </div>
+
+                <div class="tab-content" id="inventory-tab">
+                    <div class="form-group">
+                        <label for="inventory-code">Inventory Code</label>
+                        <input type="text" id="inventory-code" placeholder="Enter inventory code">
+                    </div>
+                </div>
+
+                <div class="tab-content" id="custom-tab">
+                    <div class="form-group">
+                        <label for="custom-code">Custom Data</label>
+                        <textarea id="custom-code" placeholder="Enter any text or numbers to encode"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Barcode Type</label>
+                    <div class="custom-select" id="barcode-type-selector">
+                        <div class="selected-option">
+                            <i class="fas fa-barcode"></i> CODE128
+                        </div>
+                        <input type="hidden" id="barcode-type" value="CODE128">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="barcode-width">Width: <span id="width-value">2px</span></label>
+                    <div class="slider-container">
+                        <input type="range" id="barcode-width" min="1" max="5" value="2" step="0.1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="barcode-height">Height: <span id="height-value">100px</span></label>
+                    <div class="slider-container">
+                        <input type="range" id="barcode-height" min="50" max="300" value="100">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Color Customization</label>
+                    <div class="color-picker">
+                        <div class="color-option">
+                            <label for="barcode-color">Barcode Color</label>
+                            <div class="color-display" id="barcode-color-display" style="background-color: #000000;"></div>
+                            <input type="hidden" id="barcode-color" value="#000000">
+                        </div>
+                        <div class="color-option">
+                            <label for="barcode-bg-color">Background</label>
+                            <div class="color-display" id="barcode-bg-color-display" style="background-color: #ffffff;"></div>
+                            <input type="hidden" id="barcode-bg-color" value="#ffffff">
+                        </div>
+                    </div>
+                    
+                    <label style="margin-top: 1rem;">Color Presets</label>
+                    <div class="gradient-presets">
+                        <div class="gradient-preset" style="background: #000000;" data-color="#000000" data-bg="#ffffff"></div>
+                        <div class="gradient-preset" style="background: #003B46;" data-color="#003B46" data-bg="#ffffff"></div>
+                        <div class="gradient-preset" style="background: #00AEEF;" data-color="#00AEEF" data-bg="#ffffff"></div>
+                        <div class="gradient-preset" style="background: #FF8C00;" data-color="#FF8C00" data-bg="#ffffff"></div>
+                        <div class="gradient-preset" style="background: #FFD700;" data-color="#FFD700" data-bg="#003B46"></div>
+                        <div class="gradient-preset" style="background: #007bff;" data-color="#007bff" data-bg="#ffffff"></div>
+                        <div class="gradient-preset" style="background: #ff4500;" data-color="#ff4500" data-bg="#ffffff"></div>
+                        <div class="gradient-preset" style="background: #00bcd4;" data-color="#00bcd4" data-bg="#ffffff"></div>
+                        <div class="gradient-preset" style="background: #8a2be2;" data-color="#8a2be2" data-bg="#ffffff"></div>
+                        <div class="gradient-preset" style="background: #ff1493;" data-color="#ff1493" data-bg="#ffffff"></div>
+                    </div>
+                </div>
+
+                <div class="text-options">
+                    <div class="text-option-group">
+                        <div class="text-option-title">
+                            <i class="fas fa-font"></i> Text Options
+                        </div>
+                        <div class="text-option-buttons">
+                            <button class="text-option-btn active" data-text="show">
+                                <i class="fas fa-eye"></i> Show Text
+                            </button>
+                            <button class="text-option-btn" data-text="hide">
+                                <i class="fas fa-eye-slash"></i> Hide Text
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="text-option-group">
+                        <div class="text-option-title">
+                            <i class="fas fa-text-height"></i> Font Size
+                        </div>
+                        <div class="text-option-buttons">
+                            <button class="text-option-btn" data-fontsize="small">
+                                <i class="fas fa-font"></i> Small
+                            </button>
+                            <button class="text-option-btn active" data-fontsize="medium">
+                                <i class="fas fa-font"></i> Medium
+                            </button>
+                            <button class="text-option-btn" data-fontsize="large">
+                                <i class="fas fa-font"></i> Large
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="generate-btn" class="btn btn-primary">
+                    <i class="fas fa-barcode"></i> Generate Barcode
+                </button>
+            </div>
+
+            <div class="output-panel">
+                <div class="barcode-container">
+                    <canvas id="barcode"></canvas>
+                    <div class="barcode-placeholder">
+                        <i class="fas fa-barcode"></i>
+                        <p>Your barcode will appear here</p>
+                    </div>
+                </div>
+
+                <div class="download-options">
+                    <button id="download-png" class="btn btn-secondary download-btn" disabled>
+                        <i class="fas fa-download"></i> PNG
+                    </button>
+                    <button id="download-svg" class="btn btn-secondary download-btn" disabled>
+                        <i class="fas fa-download"></i> SVG
+                    </button>
+                    <button id="download-jpg" class="btn btn-secondary download-btn" disabled>
+                        <i class="fas fa-download"></i> JPG
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Container Middle -->
+        <div class="ad-container">
+            <div>
+                <div class="ad-label">Advertisement</div>
+                <!-- Replace with your Google AdSense code -->
+                <div id="ad-middle">
+                    <!-- Example: <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"></script> -->
+                    <!-- Example: <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-YOUR_PUBLISHER_ID" data-ad-slot="YOUR_AD_SLOT" data-ad-format="auto" data-full-width-responsive="true"></ins> -->
+                    <!-- Example: <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-barcode"></i>
+                </div>
+                <h3 class="feature-title">Multiple Barcode Types</h3>
+                <p class="feature-desc">Generate barcodes in various formats including CODE128, EAN-13, UPC-A, and more.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <h3 class="feature-title">Custom Colors</h3>
+                <p class="feature-desc">Customize barcode colors to match your brand or design requirements.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <h3 class="feature-title">Multiple Formats</h3>
+                <p class="feature-desc">Download your barcode in PNG, SVG, or JPG format for any use case.</p>
+            </div>
+        </div>
+
+        <!-- Ad Container Bottom -->
+        <div class="ad-container">
+            <div>
+                <div class="ad-label">Advertisement</div>
+                <!-- Replace with your Google AdSense code -->
+                <div id="ad-bottom">
+                    <!-- Example: <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"></script> -->
+                    <!-- Example: <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-YOUR_PUBLISHER_ID" data-ad-slot="YOUR_AD_SLOT" data-ad-format="auto" data-full-width-responsive="true"></ins> -->
+                    <!-- Example: <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; <span id="current-year"></span> NeoBar Pro. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Color Picker Modal -->
+    <div class="modal-overlay" id="color-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Select Color</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="color-grid">
+                    <div class="color-option-btn" style="background: #000000;" data-color="#000000"></div>
+                    <div class="color-option-btn" style="background: #003B46;" data-color="#003B46"></div>
+                    <div class="color-option-btn" style="background: #00AEEF;" data-color="#00AEEF"></div>
+                    <div class="color-option-btn" style="background: #007bff;" data-color="#007bff"></div>
+                    <div class="color-option-btn" style="background: #FF8C00;" data-color="#FF8C00"></div>
+                    <div class="color-option-btn" style="background: #FFD700;" data-color="#FFD700"></div>
+                    <div class="color-option-btn" style="background: #ff4500;" data-color="#ff4500"></div>
+                    <div class="color-option-btn" style="background: #00bcd4;" data-color="#00bcd4"></div>
+                    <div class="color-option-btn" style="background: #00ffab;" data-color="#00ffab"></div>
+                    <div class="color-option-btn" style="background: #8a2be2;" data-color="#8a2be2"></div>
+                    <div class="color-option-btn" style="background: #ff1493;" data-color="#ff1493"></div>
+                    <div class="color-option-btn" style="background: #32cd32;" data-color="#32cd32"></div>
+                    <div class="color-option-btn" style="background: #ff6347;" data-color="#ff6347"></div>
+                    <div class="color-option-btn" style="background: #9370db;" data-color="#9370db"></div>
+                    <div class="color-option-btn" style="background: #20b2aa;" data-color="#20b2aa"></div>
+                </div>
+                
+                <div class="color-preview" id="modal-color-preview">Selected Color</div>
+                
+                <input type="text" class="hex-input" id="hex-input" placeholder="Enter HEX color (e.g. #00AEEF)" maxlength="7">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="color-cancel">Cancel</button>
+                <button class="btn btn-primary" id="color-confirm">Set Color</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barcode Type Modal -->
+    <div class="modal-overlay" id="barcode-type-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Select Barcode Type</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="barcode-type-options">
+                    <label class="barcode-type-option selected" data-value="CODE128">
+                        <input type="radio" name="barcode-type" class="barcode-type-radio" value="CODE128" checked>
+                        <div class="barcode-type-icon">
+                            <i class="fas fa-barcode"></i>
+                        </div>
+                        <div class="barcode-type-label">
+                            CODE128
+                            <div class="barcode-type-desc">High-density alphanumeric barcode</div>
+                        </div>
+                    </label>
+                    
+                    <label class="barcode-type-option" data-value="EAN13">
+                        <input type="radio" name="barcode-type" class="barcode-type-radio" value="EAN13">
+                        <div class="barcode-type-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div class="barcode-type-label">
+                            EAN-13
+                            <div class="barcode-type-desc">Standard product barcode (12-13 digits)</div>
+                        </div>
+                    </label>
+                    
+                    <label class="barcode-type-option" data-value="UPC">
+                        <input type="radio" name="barcode-type" class="barcode-type-radio" value="UPC">
+                        <div class="barcode-type-icon">
+                            <i class="fas fa-tag"></i>
+                        </div>
+                        <div class="barcode-type-label">
+                            UPC-A
+                            <div class="barcode-type-desc">Universal product code (12 digits)</div>
+                        </div>
+                    </label>
+                    
+                    <label class="barcode-type-option" data-value="CODE39">
+                        <input type="radio" name="barcode-type" class="barcode-type-radio" value="CODE39">
+                        <div class="barcode-type-icon">
+                            <i class="fas fa-hashtag"></i>
+                        </div>
+                        <div class="barcode-type-label">
+                            CODE39
+                            <div class="barcode-type-desc">Alphanumeric barcode with asterisks</div>
+                        </div>
+                    </label>
+                    
+                    <label class="barcode-type-option" data-value="ITF14">
+                        <input type="radio" name="barcode-type" class="barcode-type-radio" value="ITF14">
+                        <div class="barcode-type-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="barcode-type-label">
+                            ITF-14
+                            <div class="barcode-type-desc">Shipping container barcode (14 digits)</div>
+                        </div>
+                    </label>
+                    
+                    <label class="barcode-type-option" data-value="MSI">
+                        <input type="radio" name="barcode-type" class="barcode-type-radio" value="MSI">
+                        <div class="barcode-type-icon">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <div class="barcode-type-label">
+                            MSI
+                            <div class="barcode-type-desc">Inventory control barcode (numeric only)</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="barcode-type-cancel">Cancel</button>
+                <button class="btn btn-primary" id="barcode-type-confirm">Select</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JsBarcode library -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <!-- Canvas to Image library -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // DOM elements
+            const barcodeContent = document.getElementById('barcode-content');
+            const inventoryCode = document.getElementById('inventory-code');
+            const customCode = document.getElementById('custom-code');
+            const barcodeWidth = document.getElementById('barcode-width');
+            const widthValue = document.getElementById('width-value');
+            const barcodeHeight = document.getElementById('barcode-height');
+            const heightValue = document.getElementById('height-value');
+            const barcodeColor = document.getElementById('barcode-color');
+            const barcodeBgColor = document.getElementById('barcode-bg-color');
+            const barcodeType = document.getElementById('barcode-type');
+            const generateBtn = document.getElementById('generate-btn');
+            const barcodeCanvas = document.getElementById('barcode');
+            const barcodePlaceholder = document.querySelector('.barcode-placeholder');
+            const downloadPng = document.getElementById('download-png');
+            const downloadSvg = document.getElementById('download-svg');
+            const downloadJpg = document.getElementById('download-jpg');
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const colorPresets = document.querySelectorAll('.gradient-preset');
+            const barcodeTypeSelector = document.getElementById('barcode-type-selector');
+            const barcodeColorDisplay = document.getElementById('barcode-color-display');
+            const barcodeBgColorDisplay = document.getElementById('barcode-bg-color-display');
+            
+            // Text options
+            const textOptionBtns = document.querySelectorAll('.text-option-btn[data-text]');
+            const fontSizeBtns = document.querySelectorAll('.text-option-btn[data-fontsize]');
+            
+            // Modal elements
+            const colorModal = document.getElementById('color-modal');
+            const barcodeTypeModal = document.getElementById('barcode-type-modal');
+            const colorOptions = document.querySelectorAll('.color-option-btn');
+            const modalColorPreview = document.getElementById('modal-color-preview');
+            const hexInput = document.getElementById('hex-input');
+            const colorConfirm = document.getElementById('color-confirm');
+            const colorCancel = document.getElementById('color-cancel');
+            const barcodeTypeOptions = document.querySelectorAll('.barcode-type-option');
+            const barcodeTypeConfirm = document.getElementById('barcode-type-confirm');
+            const barcodeTypeCancel = document.getElementById('barcode-type-cancel');
+            const modalCloses = document.querySelectorAll('.modal-close');
+
+            // State variables
+            let activeContentType = 'product';
+            let currentColorPicker = null; // 'barcode' or 'bg'
+            let selectedColor = '#000000';
+            let selectedBarcodeType = 'CODE128';
+            let showText = true;
+            let fontSize = 'medium';
+
+            // Add click animations to buttons
+            const buttons = document.querySelectorAll('.btn, .gradient-preset');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.classList.contains('btn')) {
+                        this.classList.add('btn-click');
+                        setTimeout(() => {
+                            this.classList.remove('btn-click');
+                        }, 300);
+                    } else if (this.classList.contains('gradient-preset')) {
+                        this.classList.add('logo-click');
+                        setTimeout(() => {
+                            this.classList.remove('logo-click');
+                        }, 300);
+                    }
+                });
+            });
+
+            // Update size value displays
+            widthValue.textContent = `${barcodeWidth.value}px`;
+            heightValue.textContent = `${barcodeHeight.value}px`;
+            
+            barcodeWidth.addEventListener('input', function() {
+                widthValue.textContent = `${this.value}px`;
+            });
+            
+            barcodeHeight.addEventListener('input', function() {
+                heightValue.textContent = `${this.value}px`;
+            });
+
+            // Tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    activeContentType = this.getAttribute('data-tab');
+                    document.getElementById(`${activeContentType}-tab`).classList.add('active');
+                });
+            });
+
+            // Color preset selection
+            colorPresets.forEach(preset => {
+                preset.addEventListener('click', function() {
+                    colorPresets.forEach(p => p.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const color = this.getAttribute('data-color');
+                    const bgColor = this.getAttribute('data-bg');
+                    
+                    barcodeColor.value = color;
+                    barcodeBgColor.value = bgColor;
+                    
+                    barcodeColorDisplay.style.backgroundColor = color;
+                    barcodeBgColorDisplay.style.backgroundColor = bgColor;
+                });
+            });
+
+            // Barcode type selector click handler
+            barcodeTypeSelector.addEventListener('click', function() {
+                openBarcodeTypeModal();
+            });
+
+            // Color picker display click handlers
+            barcodeColorDisplay.addEventListener('click', function() {
+                currentColorPicker = 'barcode';
+                openColorModal(barcodeColorDisplay.style.backgroundColor);
+            });
+
+            barcodeBgColorDisplay.addEventListener('click', function() {
+                currentColorPicker = 'bg';
+                openColorModal(barcodeBgColorDisplay.style.backgroundColor);
+            });
+
+            // Text option buttons
+            textOptionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    textOptionBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    showText = this.getAttribute('data-text') === 'show';
+                });
+            });
+
+            // Font size buttons
+            fontSizeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    fontSizeBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    fontSize = this.getAttribute('data-fontsize');
+                });
+            });
+
+            // Color modal functionality
+            function openColorModal(currentColor) {
+                selectedColor = currentColor;
+                modalColorPreview.style.backgroundColor = selectedColor;
+                modalColorPreview.textContent = selectedColor;
+                
+                // Update selected state in color grid
+                colorOptions.forEach(option => {
+                    option.classList.remove('selected');
+                    if (option.getAttribute('data-color').toLowerCase() === currentColor.toLowerCase()) {
+                        option.classList.add('selected');
+                    }
+                });
+                
+                hexInput.value = currentColor;
+                colorModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            // Barcode type modal functionality
+            function openBarcodeTypeModal() {
+                barcodeTypeModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            // Color option selection
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    colorOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedColor = this.getAttribute('data-color');
+                    modalColorPreview.style.backgroundColor = selectedColor;
+                    modalColorPreview.textContent = selectedColor;
+                    hexInput.value = selectedColor;
+                });
+            });
+
+            // HEX input handling
+            hexInput.addEventListener('input', function() {
+                const value = this.value;
+                if (value.match(/^#[0-9A-Fa-f]{6}$/)) {
+                    selectedColor = value;
+                    modalColorPreview.style.backgroundColor = selectedColor;
+                    modalColorPreview.textContent = selectedColor;
+                    
+                    // Update selected state in color grid
+                    colorOptions.forEach(option => {
+                        option.classList.remove('selected');
+                        if (option.getAttribute('data-color').toLowerCase() === value.toLowerCase()) {
+                            option.classList.add('selected');
+                        }
+                    });
+                }
+            });
+
+            // Barcode type option selection
+            barcodeTypeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    barcodeTypeOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedBarcodeType = this.getAttribute('data-value');
+                });
+            });
+
+            // Color confirm button
+            colorConfirm.addEventListener('click', function() {
+                if (currentColorPicker === 'barcode') {
+                    barcodeColor.value = selectedColor;
+                    barcodeColorDisplay.style.backgroundColor = selectedColor;
+                } else {
+                    barcodeBgColor.value = selectedColor;
+                    barcodeBgColorDisplay.style.backgroundColor = selectedColor;
+                }
+                closeModal(colorModal);
+            });
+
+            // Barcode type confirm button
+            barcodeTypeConfirm.addEventListener('click', function() {
+                barcodeType.value = selectedBarcodeType;
+                
+                // Update the displayed barcode type
+                const selectedOption = document.querySelector('.barcode-type-option.selected');
+                const icon = selectedOption.querySelector('.barcode-type-icon i').className;
+                const label = selectedOption.querySelector('.barcode-type-label').textContent.split('\n')[0];
+                
+                barcodeTypeSelector.querySelector('.selected-option').innerHTML = `
+                    <i class="${icon}"></i> ${label}
+                `;
+                
+                closeModal(barcodeTypeModal);
+            });
+
+            // Cancel buttons
+            colorCancel.addEventListener('click', function() {
+                closeModal(colorModal);
+            });
+
+            barcodeTypeCancel.addEventListener('click', function() {
+                closeModal(barcodeTypeModal);
+            });
+
+            // Modal close buttons
+            modalCloses.forEach(closeBtn => {
+                closeBtn.addEventListener('click', function() {
+                    const modal = this.closest('.modal-overlay');
+                    closeModal(modal);
+                });
+            });
+
+            // Close modal when clicking outside
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeModal(this);
+                    }
+                });
+            });
+
+            function closeModal(modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            // Download buttons
+            downloadPng.addEventListener('click', downloadPNG);
+            downloadSvg.addEventListener('click', downloadSVG);
+            downloadJpg.addEventListener('click', downloadJPG);
+
+            // Generate barcode
+            generateBtn.addEventListener('click', generateBarcode);
+
+            function generateBarcode() {
+                let content = '';
+                
+                // Get content based on active tab
+                switch(activeContentType) {
+                    case 'product':
+                        content = barcodeContent.value.trim();
+                        break;
+                    case 'inventory':
+                        content = inventoryCode.value.trim();
+                        break;
+                    case 'custom':
+                        content = customCode.value.trim();
+                        break;
+                }
+
+                if (!content) {
+                    showNotification('Please enter some content to generate a barcode', 'error');
+                    return;
+                }
+
+                const width = parseFloat(barcodeWidth.value);
+                const height = parseInt(barcodeHeight.value);
+                const color = barcodeColor.value;
+                const bgColor = barcodeBgColor.value;
+                const type = barcodeType.value;
+
+                // Validate content based on barcode type
+                if (type === 'EAN13' && (!/^\d{12,13}$/.test(content) || (content.length === 13 && !isValidEAN13(content)))) {
+                    showNotification('EAN-13 requires 12 digits (or 13 with valid check digit)', 'error');
+                    return;
+                }
+
+                if (type === 'UPC' && !/^\d{12}$/.test(content)) {
+                    showNotification('UPC-A requires exactly 12 digits', 'error');
+                    return;
+                }
+
+                if (type === 'ITF14' && !/^\d{14}$/.test(content)) {
+                    showNotification('ITF-14 requires exactly 14 digits', 'error');
+                    return;
+                }
+
+                if (type === 'MSI' && !/^\d+$/.test(content)) {
+                    showNotification('MSI requires numeric characters only', 'error');
+                    return;
+                }
+
+                // Clear previous barcode
+                barcodeCanvas.style.display = 'none';
+                
+                // Show loading state
+                barcodePlaceholder.innerHTML = '<i class="fas fa-spinner fa-spin"></i><p>Generating Barcode...</p>';
+                barcodePlaceholder.style.display = 'flex';
+                barcodePlaceholder.style.flexDirection = 'column';
+                barcodePlaceholder.style.alignItems = 'center';
+                barcodePlaceholder.style.justifyContent = 'center';
+
+                // Generate new barcode with slight delay for better UX
+                setTimeout(() => {
+                    try {
+                        // Set font size based on selection
+                        let fontSizePx = 20;
+                        if (fontSize === 'small') fontSizePx = 16;
+                        if (fontSize === 'large') fontSizePx = 24;
+
+                        // Generate barcode
+                        JsBarcode(barcodeCanvas, content, {
+                            format: type,
+                            width: width,
+                            height: height,
+                            displayValue: showText,
+                            fontOptions: 'bold',
+                            fontSize: fontSizePx,
+                            margin: 10,
+                            marginTop: 15,
+                            marginBottom: 15,
+                            lineColor: color,
+                            background: bgColor
+                        });
+                        
+                        // Hide placeholder and show barcode
+                        barcodePlaceholder.style.display = 'none';
+                        barcodeCanvas.style.display = 'block';
+
+                        // Enable download buttons
+                        downloadPng.disabled = false;
+                        downloadSvg.disabled = false;
+                        downloadJpg.disabled = false;
+                        downloadPng.classList.add('pulsing');
+                        downloadSvg.classList.add('pulsing');
+                        downloadJpg.classList.add('pulsing');
+
+                        // Show success notification
+                        showNotification('Barcode generated successfully!', 'success');
+                    } catch (err) {
+                        console.error(err);
+                        showNotification('Error generating barcode. Please check your input.', 'error');
+                        barcodePlaceholder.innerHTML = '<i class="fas fa-exclamation-triangle"></i><p>Error generating barcode</p>';
+                    }
+                }, 500);
+            }
+
+            function downloadPNG() {
+                const link = document.createElement('a');
+                link.download = 'neobar-code.png';
+                link.href = barcodeCanvas.toDataURL('image/png');
+                link.click();
+                
+                showNotification('PNG download started', 'success');
+            }
+
+            function downloadSVG() {
+                // For SVG, we need to recreate the barcode with SVG output
+                const tempCanvas = document.createElement('canvas');
+                JsBarcode(tempCanvas, getContent(), {
+                    format: barcodeType.value,
+                    width: parseFloat(barcodeWidth.value),
+                    height: parseInt(barcodeHeight.value),
+                    displayValue: showText,
+                    lineColor: barcodeColor.value,
+                    background: barcodeBgColor.value
+                });
+                
+                const svgData = tempCanvas.toDataURL('image/svg+xml');
+                const link = document.createElement('a');
+                link.download = 'neobar-code.svg';
+                link.href = svgData;
+                link.click();
+                
+                showNotification('SVG download started', 'success');
+            }
+
+            function downloadJPG() {
+                const link = document.createElement('a');
+                link.download = 'neobar-code.jpg';
+                link.href = barcodeCanvas.toDataURL('image/jpeg', 0.9);
+                link.click();
+                
+                showNotification('JPG download started', 'success');
+            }
+
+            function getContent() {
+                let content = '';
+                
+                switch(activeContentType) {
+                    case 'product':
+                        content = barcodeContent.value.trim();
+                        break;
+                    case 'inventory':
+                        content = inventoryCode.value.trim();
+                        break;
+                    case 'custom':
+                        content = customCode.value.trim();
+                        break;
+                }
+                
+                return content;
+            }
+
+            function isValidEAN13(code) {
+                if (code.length !== 13) return false;
+                
+                const checkDigit = parseInt(code.charAt(12));
+                let sum = 0;
+                
+                for (let i = 0; i < 12; i++) {
+                    const digit = parseInt(code.charAt(i));
+                    sum += (i % 2 === 0) ? digit : digit * 3;
+                }
+                
+                const calculatedCheckDigit = (10 - (sum % 10)) % 10;
+                return checkDigit === calculatedCheckDigit;
+            }
+
+            function showNotification(message, type) {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                
+                // Style the notification
+                notification.style.position = 'fixed';
+                notification.style.bottom = '20px';
+                notification.style.right = '20px';
+                notification.style.padding = '15px 25px';
+                notification.style.borderRadius = '12px';
+                notification.style.color = 'white';
+                notification.style.fontWeight = '500';
+                notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
+                notification.style.zIndex = '1000';
+                notification.style.transform = 'translateY(100px)';
+                notification.style.opacity = '0';
+                notification.style.transition = 'all 0.3s ease';
+                
+                // Set background based on type
+                if (type === 'error') {
+                    notification.style.background = 'linear-gradient(135deg, #ff4d4d, #cc0000)';
+                } else {
+                    notification.style.background = 'linear-gradient(135deg, var(--primary-blue), #007bff)';
+                }
+                
+                document.body.appendChild(notification);
+                
+                // Show notification
+                setTimeout(() => {
+                    notification.style.transform = 'translateY(0)';
+                    notification.style.opacity = '1';
+                }, 10);
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    notification.style.transform = 'translateY(100px)';
+                    notification.style.opacity = '0';
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 300);
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
